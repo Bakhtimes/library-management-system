@@ -32,7 +32,7 @@ Global Exception Advisor: Centralized air-traffic error interceptor using @Contr
 
 ## Configuration & Installation
 ### Prerequisites
-   Java JDK 17 or higher installed.
+   Java JDK 21 or higher installed.
 
 Maven package manager installed.
 
