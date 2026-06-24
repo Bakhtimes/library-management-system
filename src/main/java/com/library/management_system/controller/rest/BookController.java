@@ -20,40 +20,54 @@ public class BookController {
 
     private final Logger logger = LoggerFactory.getLogger(BookController.class);
     private final BookService bookService;
-    private final BookMapper mapper;
+    private final BookMapper bookMapper;
 
-    public BookController(BookService bookService, BookMapper mapper) {
+    public BookController(
+            BookService bookService,
+            BookMapper bookMapper) {
+
         this.bookService = bookService;
-        this.mapper = mapper;
+        this.bookMapper = bookMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<BookResponseDTO>> getAllBooks(@RequestParam(required = false) String search) {
+    public ResponseEntity<List<BookResponseDTO>> getAllBooks(
+            @RequestParam(required = false) String search) {
+
+        final List<BookResponseDTO> bookResponses = bookService.searchBooks(search)
+                .stream()
+                .map(bookMapper::toResponse)
+                .toList();
+
         logger.info("Entire library retrieved");
-        return ResponseEntity.ok(
-                bookService.searchBooks(search).stream()
-                        .map(mapper::toResponse)
-                        .toList()
-        );
+        return ResponseEntity.ok(bookResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> getBookById(@PathVariable UUID id) {
-        Book book = bookService.getBookById(id);
-        return ResponseEntity.ok(
-                mapper.toResponse(book)
-        );
+    public ResponseEntity<BookResponseDTO> getBookById(
+            @PathVariable UUID id) {
+
+        final Book book = bookService.getBookById(id);
+        final BookResponseDTO bookResponse = bookMapper.toResponse(book);
+
+        return ResponseEntity.ok(bookResponse);
     }
 
     @PostMapping
-    public ResponseEntity<BookResponseDTO> createBook(@RequestBody BookCreationDTO bookRequest) {
-        return ResponseEntity.ok(
-                mapper.toResponse(bookService.addBook(mapper.toEntity(bookRequest)))
-        );
+    public ResponseEntity<BookResponseDTO> createBook(
+            @RequestBody BookCreationDTO bookRequest) {
+
+        final Book createdBook = bookMapper.toEntity(bookRequest);
+        final Book addedBook = bookService.addBook(createdBook);
+        final BookResponseDTO bookResponse = bookMapper.toResponse(addedBook);
+
+        return ResponseEntity.ok(bookResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, UUID>> deleteBook(@PathVariable UUID id) {
+    public ResponseEntity<Map<String, UUID>> deleteBook(
+            @PathVariable UUID id) {
+
         return ResponseEntity.ok(Map.of("id", id));
     }
 }

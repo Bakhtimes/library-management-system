@@ -1,5 +1,7 @@
 package com.library.management_system.model;
 
+import com.library.management_system.model.type.LendingType;
+import com.library.management_system.model.type.RequestStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;

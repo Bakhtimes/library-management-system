@@ -1,7 +1,10 @@
 package com.library.management_system.controller.web;
 
+import com.library.management_system.error.exception.BookRequestBadStatusException;
+import com.library.management_system.error.exception.BookRequestNotFound;
 import com.library.management_system.model.BookRequest;
 import com.library.management_system.model.User;
+import com.library.management_system.model.embeddable.Username;
 import com.library.management_system.service.BookRequestService;
 import com.library.management_system.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +25,8 @@ import java.util.UUID;
 @PreAuthorize("hasRole('READER')")
 public class WebReaderController {
 
+    private static final String REDIRECT_READER_DASHBOARD_ERROR = "redirect:/reader/dashboard?error=%s";
+    
     private final BookRequestService requestService;
     private final UserService userService;
 
@@ -38,12 +43,12 @@ public class WebReaderController {
             @AuthenticationPrincipal UserDetails userDetails,
             Model model) {
 
-        User currentReader = userService.getUserByUsername(userDetails.getUsername());
+        User currentReader = userService.getUserByUsername(new Username(userDetails.getUsername()));
 
         List<BookRequest> userHistory = requestService.getReaderHistory(currentReader.getId());
 
         model.addAttribute("history", userHistory);
-        model.addAttribute("reader", currentReader);
+        model.addAttribute("readerName", currentReader.getUsername());
 
         return "reader-dashboard";
     }
@@ -52,9 +57,10 @@ public class WebReaderController {
     public String cancelOwnRequest(@PathVariable UUID id) {
         try {
             requestService.cancelRequest(id);
+
             return "redirect:/reader/dashboard?success=cancelled";
-        } catch (Exception e) {
-            return "redirect:/reader/dashboard?error=" + e.getMessage();
+        } catch (BookRequestNotFound | BookRequestBadStatusException e) {
+            return REDIRECT_READER_DASHBOARD_ERROR.formatted(e.getMessage());
         }
     }
 }

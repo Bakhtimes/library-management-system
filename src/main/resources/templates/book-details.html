@@ -35,6 +35,7 @@
                     <p class="card-text text-secondary mb-4" th:text="${book.description}">
                         Full description text details go here...
                     </p>
+                    <h6 th:text="${'Number of copies: ' + book.copyCount + ' (' + book.availableCopyCount + ' Available)'}">Number of copies</h6>
 
                     <hr class="my-4">
 

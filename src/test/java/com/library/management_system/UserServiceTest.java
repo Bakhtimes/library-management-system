@@ -1,7 +1,8 @@
 package com.library.management_system;
 
-import com.library.management_system.model.Role;
+import com.library.management_system.model.type.Role;
 import com.library.management_system.model.User;
+import com.library.management_system.model.embeddable.Username;
 import com.library.management_system.repository.UserRepository;
 import com.library.management_system.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -21,13 +22,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    private static final String USERNAME = "john_doe";
+    private static final Username USERNAME = new Username("john_doe");
     private static final String PLAINTEXT_PASSWORD = "plainTextPassword123";
     private static final String HASHED_PASSWORD = "mocked_hashed_password";
 
-    private static final String WRONG_USERNAME = "wrong_john_doe";
-    private static final String WRONG_PLAINTEXT_PASSWORD = "wrong_plainTextPassword123";
-    private static final String WRONG_HASHED_PASSWORD = "wrong_mocked_hashed_password";
+    private static final Username WRONG_USERNAME = new Username("wrong_john_doe");
 
     @Mock
     private UserRepository userRepository;
@@ -70,7 +69,7 @@ public class UserServiceTest {
         when(userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(inputUser));
 
         User savedUser = userService.registerReader(inputUser);
-        String actualUsername = savedUser.getUsername();
+        Username actualUsername = savedUser.getUsername();
 
         User actualUser = userService.getUserByUsername(actualUsername);
 

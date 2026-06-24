@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Reader Registration</title>
@@ -16,8 +16,11 @@
         <h3 class="text-center mb-3">Create Account</h3>
         <p class="text-muted text-center mb-4">Register as a library reader</p>
 
-        <div th:if="${param.error}" class="alert alert-danger py-2" role="alert">
-            Username or email already exists.
+        <div th:if="${param.error}" th:text="${param.errorMessage}" class="alert alert-danger py-2" role="alert">
+            <div th:text="${param.errorMessage}">
+                Username or email already exists.
+            </div>
+
         </div>
 
         <form th:action="@{/web/auth/register}" method="post">
@@ -26,8 +29,8 @@
                 <input type="text" id="username" name="username" class="form-control" required>
             </div>
             <div class="mb-4">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
+                <label for="plain_password" class="form-label">Password</label>
+                <input type="password" id="plain_password" name="plainPassword" class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-success w-100 py-2">Register</button>

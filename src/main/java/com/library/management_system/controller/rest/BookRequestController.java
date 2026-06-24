@@ -3,6 +3,7 @@ package com.library.management_system.controller.rest;
 import com.library.management_system.dto.BookRequestCreationDTO;
 import com.library.management_system.model.BookRequest;
 import com.library.management_system.model.User;
+import com.library.management_system.model.embeddable.Username;
 import com.library.management_system.service.BookRequestService;
 import com.library.management_system.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +36,8 @@ public class BookRequestController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody BookRequestCreationDTO dto) {
 
-        final User currentReader = userService.getUserByUsername(
-                userDetails.getUsername()
-        );
-
+        final Username username = new Username(userDetails.getUsername());
+        final User currentReader = userService.getUserByUsername(username);
         final BookRequest request = requestService.createRequest(
                 currentReader.getId(),
                 dto.bookId(),
@@ -50,7 +49,9 @@ public class BookRequestController {
 
     @PutMapping("/reader/requests/{id}/cancel")
     @PreAuthorize("hasRole('READER')")
-    public ResponseEntity<BookRequest> cancelRequest(@PathVariable UUID id) {
+    public ResponseEntity<BookRequest> cancelRequest(
+            @PathVariable UUID id) {
+
         return ResponseEntity.ok(requestService.cancelRequest(id));
     }
 

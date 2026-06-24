@@ -1,5 +1,7 @@
 package com.library.management_system.model;
 
+import com.library.management_system.model.embeddable.Username;
+import com.library.management_system.model.type.Role;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -13,8 +15,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Embedded
+    private Username username;
 
     @Column(nullable = false)
     private String password;
@@ -28,7 +30,7 @@ public class User {
     public User() {
     }
 
-    public User(UUID id, boolean isBlocked, Role role, String password, String username) {
+    public User(UUID id, boolean isBlocked, Role role, String password, Username username) {
         this.id = id;
         this.isBlocked = isBlocked;
         this.role = role;
@@ -36,7 +38,7 @@ public class User {
         this.username = username;
     }
 
-    public User(UUID id, String username, String password, Role role) {
+    public User(UUID id, Username username, String password, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -51,11 +53,11 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
+    public Username getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(Username username) {
         this.username = username;
     }
 

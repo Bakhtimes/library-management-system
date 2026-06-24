@@ -1,6 +1,6 @@
 package com.library.management_system.controller.rest;
 
-import com.library.management_system.model.Role;
+import com.library.management_system.model.type.Role;
 import com.library.management_system.model.User;
 import com.library.management_system.service.UserService;
 import org.springframework.http.ResponseEntity;

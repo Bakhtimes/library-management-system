@@ -1,7 +1,7 @@
 package com.library.management_system.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.library.management_system.model.LendingType;
+import com.library.management_system.model.type.LendingType;
 
 import java.util.UUID;
 

@@ -1,7 +1,7 @@
 package com.library.management_system.repository;
 
 import com.library.management_system.model.BookRequest;
-import com.library.management_system.model.RequestStatus;
+import com.library.management_system.model.type.RequestStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -3,8 +3,12 @@ package com.library.management_system.mapper;
 import com.library.management_system.dto.BookCreationDTO;
 import com.library.management_system.dto.BookResponseDTO;
 import com.library.management_system.model.Book;
+import com.library.management_system.model.BookCopy;
+import com.library.management_system.model.type.CopyStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -15,8 +19,15 @@ public class BookMapper {
         final String author = book.getAuthor();
         final String genre = book.getGenre();
         final String description = book.getDescription();
-        final int size = book.getCopies() == null ? 0 : book.getCopies().size();
-        return new BookResponseDTO(id, title, author, genre, description, size);
+        final Optional<List<BookCopy>> copies = Optional.ofNullable(book.getCopies());
+        final int copyCount = copies.map(List::size).orElse(0);
+        final int availableCopyCount = copies.map(
+                list -> list.stream()
+                        .filter(copy -> copy.getStatus() == CopyStatus.AVAILABLE)
+                        .toList()
+                        .size()
+                ).orElse(0);
+        return new BookResponseDTO(id, title, author, genre, description, copyCount, availableCopyCount);
     }
 
     public Book toEntity(BookCreationDTO request) {

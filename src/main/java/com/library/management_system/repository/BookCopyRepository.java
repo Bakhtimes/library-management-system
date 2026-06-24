@@ -1,7 +1,7 @@
 package com.library.management_system.repository;
 
 import com.library.management_system.model.BookCopy;
-import com.library.management_system.model.CopyStatus;
+import com.library.management_system.model.type.CopyStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

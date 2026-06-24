@@ -1,8 +1,11 @@
 package com.library.management_system.error.exception;
 
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 public class BookRequestNotFound extends NoSuchElementException {
+
+    private static final String EXCEPTION_MESSAGE_TEMPLATE = "Cannot find Request  by Id: %s";
 
     public BookRequestNotFound() {
         super();
@@ -18,5 +21,9 @@ public class BookRequestNotFound extends NoSuchElementException {
 
     public BookRequestNotFound(Throwable cause) {
         super(cause);
+    }
+
+    public BookRequestNotFound(UUID id) {
+        super(EXCEPTION_MESSAGE_TEMPLATE.formatted(id));
     }
 }

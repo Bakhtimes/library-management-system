@@ -1,8 +1,9 @@
 package com.library.management_system.initializer;
 
-import com.library.management_system.model.Role;
+import com.library.management_system.model.type.Role;
 import com.library.management_system.model.User;
-import com.library.management_system.repository.UserRepository;
+import com.library.management_system.model.embeddable.Username;
+import com.library.management_system.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,28 +17,32 @@ public class DataInitializer {
     private final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
 
     @Bean
-    public CommandLineRunner initDatabase(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner initDatabase(UserService userService,
+                                          PasswordEncoder passwordEncoder) {
+
         return args -> {
-            if (userRepository.findByUsername("admin").isEmpty()) {
+            Username adminUsername = new Username("admin");
+            if (!userService.hasUserWithUsername(adminUsername)) {
                 User admin = new User();
-                admin.setUsername("admin");
+                admin.setUsername(adminUsername);
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setRole(Role.ADMIN);
                 admin.setBlocked(false);
 
-                userRepository.save(admin);
+                userService.registerUser(admin);
                 logger.info("Initial Admin user created successfully (username: admin, password: admin123)");
             }
 
-            if (userRepository.findByUsername("librarian").isEmpty()) {
+            Username librarianUsername = new Username("librarian");
+            if (!userService.hasUserWithUsername(librarianUsername)) {
                 User librarian = new User();
-                librarian.setUsername("librarian");
-                librarian.setPassword(passwordEncoder.encode("lib123"));
+                librarian.setUsername(librarianUsername);
+                librarian.setPassword(passwordEncoder.encode("librarian123"));
                 librarian.setRole(Role.LIBRARIAN);
                 librarian.setBlocked(false);
 
-                userRepository.save(librarian);
-                logger.info("Initial Librarian user created successfully (username: librarian, password: lib123)");
+                userService.registerUser(librarian);
+                logger.info("Initial Librarian user created successfully (username: librarian, password: librarian123)");
             }
         };
     }

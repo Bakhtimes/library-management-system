@@ -1,5 +1,6 @@
 package com.library.management_system.model;
 
+import com.library.management_system.model.type.CopyStatus;
 import jakarta.persistence.*;
 
 import java.util.Objects;

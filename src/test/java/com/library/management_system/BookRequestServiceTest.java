@@ -1,6 +1,9 @@
 package com.library.management_system;
 
 import com.library.management_system.model.*;
+import com.library.management_system.model.type.CopyStatus;
+import com.library.management_system.model.type.LendingType;
+import com.library.management_system.model.type.RequestStatus;
 import com.library.management_system.repository.BookCopyRepository;
 import com.library.management_system.repository.BookRepository;
 import com.library.management_system.repository.BookRequestRepository;
@@ -60,10 +63,8 @@ public class BookRequestServiceTest {
                 .thenReturn(List.of(mockCopy));
         when(requestRepository.save(any(BookRequest.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act (Execute the target code)
         BookRequest actualRequest = bookRequestService.createRequest(readerId, bookId, LendingType.SUBSCRIPTION);
 
-        // Assert (Verify the outcomes)
         assertNotNull(actualRequest);
         assertEquals(RequestStatus.PENDING, actualRequest.getStatus());
         assertEquals(CopyStatus.RESERVED, mockCopy.getStatus()); // State changed successfully

@@ -10,5 +10,6 @@ public record BookResponseDTO(
         String author,
         String genre,
         String description,
-        @JsonProperty("copy_count") int copyCount
+        @JsonProperty("copy_count") int copyCount,
+        @JsonProperty("available_copy_count") int availableCopyCount
 ) {}
